@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shiny Application and Reproducible Pitch Final</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Shiny Application and Reproducible Pitch Final">
+  <meta name="author" content="Nitesh Champaneri">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>Shiny Application and Reproducible Pitch Final</h1>
+    <h2>Coursera - Devoloping Data Products Final Assignment</h2>
+    <p>Nitesh Champaneri<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  
+  <hgroup>
+    <h2>Details of the Assignment</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>This is a peer review assignment within the Coursera - Devoliping Data Products Final Assignment module.</p>
+
+<p>Full Details can be found in the Instructions.Rmd file in the repo: </p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>Data</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>Data used is number of deaths within different countries:</p>
+
+<h1>deaths &lt;- read.csv(&quot;DeathsByCountry.csv&quot;, header = TRUE)</h1>
+
+<h1>summary(deaths)</h1>
+
+<p>X                  USA           BRAZIL       AUSTRALIA      FRANCE           UK            CANADA       ITALY<br>
+ Length:5           Min.   : 432   Min.   : 572   Min.   : 9   Min.   :12.0   Min.   :  0.0   Min.   : 4   Min.   : 3.0<br>
+ Class :character   1st Qu.:1149   1st Qu.:1060   1st Qu.:14   1st Qu.:14.0   1st Qu.:  0.0   1st Qu.: 5   1st Qu.: 4.0<br>
+ Mode  :character   Median :1234   Median :1175   Median :18   Median :17.0   Median :  8.0   Median : 6   Median : 6.0<br>
+                    Mean   :1127   Mean   :1069   Mean   :16   Mean   :15.6   Mean   : 48.6   Mean   : 7   Mean   : 5.8<br>
+                    3rd Qu.:1334   3rd Qu.:1262   3rd Qu.:18   3rd Qu.:17.0   3rd Qu.: 55.0   3rd Qu.: 6   3rd Qu.: 6.0<br>
+                    Max.   :1486   Max.   :1274   Max.   :21   Max.   :18.0   Max.   :180.0   Max.   :14   Max.   :10.0<br>
+     SPAIN          RUSSIA          INDIAN          PORTUGAL     NETHERLAND 
+ Min.   : 1.0   Min.   : 70.0   Min.   : 834.0   Min.   :2.0   Min.   :0.0<br>
+ 1st Qu.: 1.0   1st Qu.:114.0   1st Qu.: 871.0   1st Qu.:2.0   1st Qu.:2.0<br>
+ Median : 3.0   Median :124.0   Median : 942.0   Median :3.0   Median :2.0<br>
+ Mean   : 7.2   Mean   :113.4   Mean   : 932.2   Mean   :3.2   Mean   :2.2<br>
+ 3rd Qu.: 5.0   3rd Qu.:129.0   3rd Qu.:1007.0   3rd Qu.:3.0   3rd Qu.:3.0<br>
+ Max.   :26.0   Max.   :130.0   Max.   :1007.0   Max.   :6.0   Max.   :4.0  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>ui</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>ui &lt;- fluidPage(</p>
+
+<pre><code>    titlePanel(&quot;Deaths&quot;), 
+    sidebarLayout(       
+                     selectInput(&quot;Country&quot;, &quot;Country&quot;,
+                                 choices = colnames(deaths[-1])),
+                     hr()),
+
+
+    # Show a plot of the generated distribution
+    mainPanel(
+       plotOutput(&quot;Deaths&quot;)
+    )
+)
+</code></pre>
+
+<p>)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  
+  <hgroup>
+    <h2>Server</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <p>server &lt;- function(input, output) {</p>
+
+<p>output$Deaths &lt;- renderPlot({</p>
+
+<pre><code>       barplot(deaths[,input$Country],
+            xlab = &#39;Year&#39;,
+            main = &#39;Deaths by Year&#39;,
+            ylab = &#39;Number of Deaths&#39;)
+
+
+})
+</code></pre>
+
+<p>}</p>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Details of the Assignment'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Data'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='ui'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Server'>
+         4
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
